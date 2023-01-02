@@ -1,0 +1,354 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Challenge 02 - Documenting with Swagger",
+    "description": "This is an users registration API",
+    "version": "1.0.0",
+    "contact": {
+      "email": "judenilson@hotmail.com"
+    }
+  },
+  "tags": [
+    {
+      "name": "users",
+      "description": "User Management"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Create a user",
+        "description": "Create a new user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "User name sample",
+                  "email": "user@email.com"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "85b2cfad-d4fd-4980-b2d2-6aeafcad3fa9"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Fulano de tal"
+                    },
+                    "admin": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "fulano@email.com"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "example": "2023-01-02T00:27:19.441Z"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "example": "2023-01-02T00:27:19.441Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Email already exists!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["users"],
+        "summary": "List all users",
+        "description": "List all users, just admin user can use it.",
+        "operationId": "getAllUsers",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "user_id",
+            "description": "Admin user ID to list all users",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "85b2cfad-d4fd-4980-b2d2-6aeafcad3fa9"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Fulano de tal"
+                          },
+                          "admin": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "email": {
+                            "type": "string",
+                            "example": "fulano@email.com"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "example": "2023-01-02T00:27:19.441Z"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "example": "2023-01-02T00:27:19.441Z"
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "969b5f6d-1f09-4f3b-a98e-e149bc8b4b2f"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Biu do violão"
+                          },
+                          "admin": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "email": {
+                            "type": "string",
+                            "example": "biu@email.com"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "example": "2023-01-02T03:17:41.574Z"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "example": "2023-01-02T03:17:41.574Z"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User don't exists! or User don't is admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "User don't exists! or User don't is admin!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/admin": {
+      "patch": {
+        "tags": ["users"],
+        "summary": "Turn user admin",
+        "description": "Turn a user administrator.",
+        "operationId": "turnUserAdmin",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "description": "User ID to change to admin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "85b2cfad-d4fd-4980-b2d2-6aeafcad3fa9"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Fulano de tal"
+                    },
+                    "admin": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "fulano@email.com"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "example": "2023-01-02T00:27:19.441Z"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "example": "2023-01-02T00:27:19.441Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User don't exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "User don't exists!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "List user by id",
+        "description": "List user by id.",
+        "operationId": "getUserById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "description": "User ID to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "85b2cfad-d4fd-4980-b2d2-6aeafcad3fa9"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Fulano de tal"
+                    },
+                    "admin": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "fulano@email.com"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "example": "2023-01-02T00:27:19.441Z"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "example": "2023-01-02T00:27:19.441Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User don't exists!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "User don't exists!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
